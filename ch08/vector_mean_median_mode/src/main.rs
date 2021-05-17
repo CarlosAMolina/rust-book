@@ -9,8 +9,5 @@ fn mean(vector: Vec<usize>) -> usize {
     for number in vector.iter() {
         sum += number;
     }
-    let mean_result = sum / vector.len();
-    mean_result
+    sum / vector.len()
 }
-
-
