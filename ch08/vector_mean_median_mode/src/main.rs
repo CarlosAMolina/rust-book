@@ -20,11 +20,13 @@ fn median(vector: &Vec<usize>) -> usize {
 }
 
 fn mode(vector: &Vec<usize>) -> usize {
-    let mut map = HashMap::new();
+    let mut values_count = HashMap::new();
     for number in vector {
-        let count = map.entry(number).or_insert(0);
+        let count = values_count.entry(number).or_insert(0);
         *count += 1;
     }
-    println!("Map: {:?}", map);
-    // TODO
+    let count_max = values_count.values().max().unwrap();
+    let mut result_iter = values_count.iter().filter(|(&_x, &y)| &y == count_max);
+    let result = result_iter.next().unwrap().0;
+    **result as usize
 }
