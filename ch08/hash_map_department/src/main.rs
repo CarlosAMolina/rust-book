@@ -19,6 +19,15 @@ fn main() {
         .or_insert(vec![employee]);
 
     add_employee(&departments, &department, &employee);
+
+    let mut departments_name: Vec<_> = vec![];
+    for key in departments.keys() {
+        departments_name.push(key);
+    }
+    departments_name.sort();
+    for name in departments_name {
+        println!("{:?}: {:?}", name, departments[name]);
+    }
 }
 
 fn add_employee(departments: &HashMap<&str, Vec<&str>>, department: &str, employee: &str) {
