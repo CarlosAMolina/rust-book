@@ -47,13 +47,17 @@ fn main() {
             println!("{:?}", what_to_show);
             // TODO sort names
             if what_to_show == "company" {
-                let mut departments_name: Vec<_> = vec![];
+                let mut departmentsname: Vec<_> = vec![];
                 for key in departments.keys() {
-                    departments_name.push(key);
+                    departmentsname.push(key);
                 }
-                departments_name.sort();
-                for name in departments_name {
-                    println!("{:?}: {:?}", name, departments[name]);
+                departmentsname.sort();
+                for departmentname in departmentsname {
+                    println!(
+                        "{:?}: {:?}",
+                        departmentname,
+                        sort_hash_map_values_by_key(&departments, &departmentname)
+                    );
                 }
             } else {
                 println!("{:?}: {:?}", what_to_show, departments[what_to_show]);
@@ -79,6 +83,18 @@ fn blank_spaces_index(s: &str) -> Vec<usize> {
         }
     }
     indexes
+}
+
+fn sort_hash_map_values_by_key(
+    hash_map: &HashMap<String, Vec<String>>,
+    key: &String,
+) -> Vec<String> {
+    let mut v_to_sort: Vec<String> = vec![];
+    for v in &hash_map[key] {
+        v_to_sort.push(v.to_string());
+    }
+    v_to_sort.sort();
+    v_to_sort
 }
 
 fn print_invalid_input() {
