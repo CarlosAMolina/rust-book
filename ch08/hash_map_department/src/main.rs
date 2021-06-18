@@ -47,12 +47,7 @@ fn main() {
             println!("{:?}", what_to_show);
             // TODO sort names
             if what_to_show == "company" {
-                let mut departmentsname: Vec<_> = vec![];
-                for key in departments.keys() {
-                    departmentsname.push(key);
-                }
-                departmentsname.sort();
-                for departmentname in departmentsname {
+                for departmentname in sort_hash_map_keys(&departments){
                     println!(
                         "{:?}: {:?}",
                         departmentname,
@@ -60,7 +55,11 @@ fn main() {
                     );
                 }
             } else {
-                println!("{:?}: {:?}", what_to_show, departments[what_to_show]);
+                println!(
+                    "{:?}: {:?}",
+                    what_to_show,
+                    sort_hash_map_values_by_key(&departments, &what_to_show.to_string())
+                );
             }
         } else {
             print_invalid_input();
@@ -89,12 +88,21 @@ fn sort_hash_map_values_by_key(
     hash_map: &HashMap<String, Vec<String>>,
     key: &String,
 ) -> Vec<String> {
-    let mut v_to_sort: Vec<String> = vec![];
+    let mut values: Vec<String> = vec![];
     for v in &hash_map[key] {
-        v_to_sort.push(v.to_string());
+        values.push(v.to_string());
     }
-    v_to_sort.sort();
-    v_to_sort
+    values.sort();
+    values
+}
+
+fn sort_hash_map_keys(hash_map: &HashMap<String, Vec<String>>) -> Vec<String> {
+    let mut keys: Vec<String> = vec![];
+    for key in hash_map.keys() {
+        keys.push(key.to_string());
+    }
+    keys.sort();
+    keys
 }
 
 fn print_invalid_input() {
