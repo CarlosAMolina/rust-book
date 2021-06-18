@@ -25,35 +25,36 @@ fn main() {
             }
         };
 
-        println!("User input: {:?}", user_input);
-
-        if user_input.starts_with("Add") {
+        if user_input.starts_with("Add ") {
             let spaces_index = blank_spaces_index(&user_input);
-            println!("Spaces index: {:?}", spaces_index);
-
             let employee = user_input[spaces_index[0] + 1..spaces_index[1]].to_string();
             let department = &user_input[spaces_index[2] + 1..user_input.len()];
-
-            println!("employee / department: {:?} / {:?}", employee, department);
-
             departments
                 .entry(department.to_string())
                 .and_modify(|v| v.push(employee.to_string()))
                 .or_insert(vec![employee.to_string()]);
-            println!("{:?}", departments);
-        } else if user_input.starts_with("Show") {
+        } else if user_input.starts_with("Show ") {
             let spaces_index = blank_spaces_index(&user_input);
+            if spaces_index.len() != 3 {
+                print_invalid_input();
+                continue;
+            }
             let what_to_show = &user_input[spaces_index[2] + 1..user_input.len()];
-            println!("{:?}", what_to_show);
-            // TODO sort names
             if what_to_show == "company" {
-                for departmentname in sort_hash_map_keys(&departments){
+                for departmentname in sort_hash_map_keys(&departments) {
                     println!(
                         "{:?}: {:?}",
                         departmentname,
                         sort_hash_map_values_by_key(&departments, &departmentname)
                     );
                 }
+            } else if !departments.contains_key(what_to_show) {
+                print_invalid_input();
+                println!(
+                    "Nonexistent department. Available departments: {:?}",
+                    departments.keys()
+                );
+                continue;
             } else {
                 println!(
                     "{:?}: {:?}",
@@ -66,12 +67,6 @@ fn main() {
         }
     }
 }
-
-//fn add_employee(departments: &HashMap<&str, Vec<&str>>, department: &str, employee: &str) {
-//    println!("{:?}", departments);
-//    println!("{:?}", department);
-//    println!("{:?}", employee);
-//}
 
 fn blank_spaces_index(s: &str) -> Vec<usize> {
     let bytes = s.as_bytes();
