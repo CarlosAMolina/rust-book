@@ -1,5 +1,3 @@
-use core::fmt::Debug;
-
 fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
     let mut largest = list[0];
 
@@ -12,14 +10,12 @@ fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
     largest
 }
 
-fn largest_reference<T: PartialOrd + Copy + Debug>(list: &[T]) -> &T {
+fn largest_reference<T: PartialOrd + Copy>(list: &[T]) -> &T {
     let mut largest_index = 0;
-    println!("{:?}", list[0] > list[1]);
 
-    for &item in list {
-        if list[0] > list[2] {
-            largest_index = 3;
-            println!("hi");
+    for (i, &item) in list.iter().enumerate() {
+        if item > list[largest_index] {
+            largest_index = i;
         }
     }
 
@@ -38,6 +34,7 @@ fn main() {
 
     let result = largest(&char_list);
     assert_eq!('y', result);
-    println!("The largest char is {}", result);
+    let result = largest_reference(&char_list[..]);
+    assert_eq!(&'y', result);
 }
 
