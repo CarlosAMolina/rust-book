@@ -10,11 +10,11 @@ fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
     largest
 }
 
-fn largest_reference<T: PartialOrd + Copy>(list: &[T]) -> &T {
+fn largest_reference<T: PartialOrd>(list: &[T]) -> &T {
     let mut largest_index = 0;
 
-    for (i, &item) in list.iter().enumerate() {
-        if item > list[largest_index] {
+    for i in 0..list.len() {
+        if list[i] > list[largest_index] {
             largest_index = i;
         }
     }
