@@ -15,14 +15,27 @@ impl Config {
         }
         let query = args[1].clone();
         let filename = args[2].clone();
-
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+        let extra_options = if args.len() > 3 {
+            args[3].clone()
+        } else {
+            "".to_string()
+        };
 
         Ok(Config {
             query,
             filename,
-            case_sensitive,
+            case_sensitive: Config::is_search_case_sensitive(extra_options),
         })
+    }
+
+    fn is_search_case_sensitive(extra_options: String) -> bool {
+        if extra_options.contains("i") {
+            false
+        } else if extra_options.contains("I") {
+            true
+        } else {
+            env::var("CASE_INSENSITIVE").is_err()
+        }
     }
 }
 
