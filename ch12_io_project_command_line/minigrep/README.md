@@ -13,7 +13,7 @@ cargo run to poem.txt i # case-insensitive
 
 - Environment variable
 
-Gnu-Linux example:
+Bash example:
 
 ```bash
 export CASE_INSENSITIVE=1
