@@ -71,4 +71,7 @@ fn call_with_different_values() {
 
     assert_eq!(v1, 1);
     assert_eq!(v2, 2);
+
+    let v2 = c.value(&"hi".to_string()[..]);
+
 }
