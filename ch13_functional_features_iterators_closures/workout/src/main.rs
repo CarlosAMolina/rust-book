@@ -1,3 +1,4 @@
+use std::hash::Hash;
 use std::thread;
 use std::time::Duration;
 use std::collections::HashMap;
@@ -31,26 +32,30 @@ fn generate_workout(intensity: u32, random_number: u32) {
     }
 }
 
-struct Cacher<T>
+struct Cacher<T, U, V>
 where
-    T: Fn(u32) -> u32,
+    T: Fn(U) -> V,
+    U: Copy + Eq + Hash,
+    V: Copy + Eq + Hash,
 {
     calculation: T,
-    values: HashMap<u32, u32>,
+    values: HashMap<U, V>,
 }
 
-impl<T> Cacher<T>
+impl<T, U, V> Cacher<T, U, V>
 where
-    T: Fn(u32) -> u32,
+    T: Fn(U) -> V,
+    U: Copy + Eq + Hash,
+    V: Copy + Eq + Hash,
 {
-    fn new(calculation: T) -> Cacher<T> {
+    fn new(calculation: T) -> Cacher<T, U, V> {
         Cacher {
             calculation,
             values: HashMap::new(),
         }
     }
 
-    fn value(&mut self, arg: u32) -> u32 {
+    fn value(&mut self, arg: U) -> V {
         match self.values.get(&arg) {
             Some(v) => *v,
             None => {
@@ -72,6 +77,27 @@ fn call_with_different_values() {
     assert_eq!(v1, 1);
     assert_eq!(v2, 2);
 
-    let v2 = c.value(&"hi".to_string()[..]);
+}
+
+#[test]
+fn call_with_different_types() {
+    let mut c = Cacher::new(|a| a);
+    let v = c.value(1);
+    assert_eq!(v, 1);
+
+    let mut c = Cacher::new(|a| a);
+    let hi = "hi".to_string();
+    let v = c.value(&hi[..]);
+    assert_eq!(v, hi);
+
+}
+
+#[test]
+fn call_with_string_slice_and_return_usize() {
+    let mut c = Cacher::new(|_a| 3);
+
+    let hi = "hi".to_string();
+    let v = c.value(&hi[..]);
+    assert_eq!(v, 3);
 
 }
