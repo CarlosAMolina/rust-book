@@ -3,7 +3,10 @@ use std::net::TcpListener;
 use std::net::TcpStream;
 
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    let url = "127.0.0.1:7878";
+    let listener = TcpListener::bind(url).unwrap();
+
+    println!("Init on {}", url);
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
